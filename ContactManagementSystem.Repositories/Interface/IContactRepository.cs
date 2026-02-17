@@ -4,7 +4,7 @@ namespace ContactManagementSystem.Repositories.Interface
 {
     public interface IContactRepository
     {
-        Task<IEnumerable<ContactManagement>> GetAllContactsAsync();
+        Task<List<ContactManagement>> GetAllContactsAsync();
 
         Task<ContactManagement?> GetByEmailAsync(string email);
 
