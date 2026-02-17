@@ -14,7 +14,7 @@ namespace ContactManagementSystem.Repositories.Repository
         }
 
         // FETCH ALL
-        public async Task<IEnumerable<ContactManagement>> GetAllContactsAsync()
+        public async Task<List<ContactManagement>> GetAllContactsAsync()
         {
             return await _context.Contacts
                 .AsNoTracking()

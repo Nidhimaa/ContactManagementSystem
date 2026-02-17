@@ -38,13 +38,13 @@ namespace ContactManagementSystem.Services.Service
         }
 
         // GET ALL
-        public async Task<IEnumerable<ContactResponseDTO>> GetAllContactsAsync()
+        public async Task<List<ContactResponseDTO>> GetAllContactsAsync()
         {
             var contacts = await _repository.GetAllContactsAsync();
 
             var activeContacts = contacts.Where(x => !x.IsDeleted);
 
-            return _mapper.Map<IEnumerable<ContactResponseDTO>>(activeContacts);
+            return _mapper.Map<List<ContactResponseDTO>>(activeContacts);
         }
 
         // GET BY EMAIL

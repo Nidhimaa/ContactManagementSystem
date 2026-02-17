@@ -6,7 +6,7 @@ namespace ContactManagementSystem.Services.Interface
     {
         Task<ContactResponseDTO> AddContactAsync(ContactRequestDTO request);
 
-        Task<IEnumerable<ContactResponseDTO>> GetAllContactsAsync();
+        Task<List<ContactResponseDTO>> GetAllContactsAsync();
 
         Task<ContactResponseDTO?> GetContactByEmailAsync(string email);
 
