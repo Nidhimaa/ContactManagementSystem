@@ -2,6 +2,7 @@
 {
     public class ContactManagement
     {
+        // Using SQL server - auto increment
         public Guid Id { get; set; } = Guid.NewGuid();
 
         public string Name { get; set; } = string.Empty;

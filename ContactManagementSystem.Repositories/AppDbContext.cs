@@ -24,11 +24,11 @@ namespace ContactManagementSystem.Repositories
 
                 entity.Property(x => x.Name)
                       .IsRequired()
-                      .HasMaxLength(15);
+                      .HasMaxLength(25);
 
                 entity.Property(x => x.Email)
                       .IsRequired()
-                      .HasMaxLength(30);
+                      .HasMaxLength(50);
 
                 entity.Property(x => x.MobileNo)
                       .IsRequired()
@@ -36,7 +36,7 @@ namespace ContactManagementSystem.Repositories
 
                 entity.Property(x => x.Address)
                       .IsRequired()
-                      .HasMaxLength(50);
+                      .HasMaxLength(100);
 
                 entity.Property(x => x.IsDeleted)
                       .HasDefaultValue(false);
