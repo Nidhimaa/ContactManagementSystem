@@ -1,8 +1,0 @@
-app:
-  name: ContactManagementSystem
-  version: 1.0
-  features:
-    - add-contact
-database:
-  host: localhost
-  port: 3306
