@@ -1,8 +1,7 @@
 app:
   name: ContactManagementSystem
-  version: 2.0
+  version: 1.0
   features:
-    - add-search
     - add-contact
 database:
   host: localhost
