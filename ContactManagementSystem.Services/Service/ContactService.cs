@@ -4,6 +4,8 @@ using ContactManagementSystem.Repositories;
 using ContactManagementSystem.Repositories.Interface;
 using ContactManagementSystem.Repositories.Models;
 using ContactManagementSystem.Services.Interface;
+using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
 
 namespace ContactManagementSystem.Services.Service
 {
@@ -12,15 +14,28 @@ namespace ContactManagementSystem.Services.Service
         private readonly IContactRepository _repository;
         private readonly AppDbContext _context;
         private readonly IMapper _mapper;
+        private readonly IAuditService _auditService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public ContactService(
             IContactRepository repository,
             AppDbContext context,
-            IMapper mapper)
+            IMapper mapper,
+            IAuditService auditService,
+            IHttpContextAccessor httpContextAccessor)
         {
             _repository = repository;
             _context = context;
             _mapper = mapper;
+            _auditService = auditService;
+            _httpContextAccessor = httpContextAccessor;
+        }
+
+        // Helper method to get logged user email
+        private string GetLoggedUserEmail()
+        {
+            return _httpContextAccessor.HttpContext?.User
+                ?.FindFirst(ClaimTypes.Email)?.Value ?? "Unknown";
         }
 
         // CREATE
@@ -33,6 +48,14 @@ namespace ContactManagementSystem.Services.Service
 
             _context.Contacts.Add(entity);
             await _context.SaveChangesAsync();
+
+            // Audit Log for create Contact.
+            await _auditService.LogAuditEventAsync(new AuditEventDTO
+            {
+                UserAction = "Added Contact",
+                UserEmail = GetLoggedUserEmail()
+            });
+
 
             return _mapper.Map<ContactResponseDTO>(entity);
         }
@@ -75,7 +98,13 @@ namespace ContactManagementSystem.Services.Service
 
             await _context.SaveChangesAsync();
 
-            // FIX: Return Response DTO instead of Update DTO
+            // Audit Log for update Contact.
+            await _auditService.LogAuditEventAsync(new AuditEventDTO
+            {
+                UserAction = "Updated Contact",
+                UserEmail = GetLoggedUserEmail()
+            });
+
             return _mapper.Map<ContactResponseDTO>(existing);
         }
 
@@ -91,6 +120,12 @@ namespace ContactManagementSystem.Services.Service
 
             _context.Contacts.Update(existing);
             await _context.SaveChangesAsync();
+
+            await _auditService.LogAuditEventAsync(new AuditEventDTO
+            {
+                UserAction = "Contact Deleted",
+                UserEmail = GetLoggedUserEmail()
+            });
 
             return true;
         }

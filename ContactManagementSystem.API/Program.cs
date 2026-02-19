@@ -80,6 +80,9 @@ builder.Services.AddScoped<RegisterValidator>();
 builder.Services.AddScoped<LoginValidator>();
 builder.Services.AddScoped<UpdateValidator>();
 
+builder.Services.AddScoped<IAuditService, AuditService>();
+builder.Services.AddHttpContextAccessor();
+
 // JWT AUTHENTICATION
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 

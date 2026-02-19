@@ -14,6 +14,8 @@ namespace ContactManagementSystem.Repositories
 
         public DbSet<ContactManagement> Contacts { get; set; }
 
+        public DbSet<AuditEvent> AuditEvents { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

@@ -1,5 +1,6 @@
 ﻿using ContactManagementSystem.API.Validators;
 using ContactManagementSystem.DTOs;
+using ContactManagementSystem.Services.Interface;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -17,17 +18,20 @@ namespace ContactManagementSystem.API.Controllers
         private readonly IConfiguration _configuration;
         private readonly RegisterValidator _registerValidator;
         private readonly LoginValidator _loginValidator;
+        private readonly IAuditService _auditService;
 
         public AuthenticationController(
             UserManager<IdentityUser> userManager,
             IConfiguration configuration,
             RegisterValidator registerValidator,
-            LoginValidator loginValidator)
+            LoginValidator loginValidator,
+            IAuditService auditService)
         {
             _userManager = userManager;
             _configuration = configuration;
             _registerValidator = registerValidator;
             _loginValidator = loginValidator;
+            _auditService = auditService;
         }
 
         // REGISTER
@@ -60,6 +64,12 @@ namespace ContactManagementSystem.API.Controllers
                 if (!result.Succeeded)
                     return BadRequest(result.Errors);
 
+                await _auditService.LogAuditEventAsync(new AuditEventDTO
+                {
+                    UserAction = "User Registered",
+                    UserEmail = request.Email
+                });
+
                 return Ok("User registration completed successfully.");
             }
             catch (Exception ex)
@@ -87,6 +97,12 @@ namespace ContactManagementSystem.API.Controllers
                     return Unauthorized("Invalid login credentials.");
 
                 var token = GenerateToken(user);
+
+                await _auditService.LogAuditEventAsync(new AuditEventDTO
+                {
+                    UserAction = "User Login",
+                    UserEmail = request.Email
+                });
 
                 return Ok(new
                 {
