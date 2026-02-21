@@ -69,6 +69,7 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>()
 
 // REPOSITORY DI
 builder.Services.AddScoped<IContactRepository, ContactRepository>();
+builder.Services.AddHostedService<DbInitializer>();
 
 // SERVICE DI
 builder.Services.AddScoped<IContactService, ContactService>();

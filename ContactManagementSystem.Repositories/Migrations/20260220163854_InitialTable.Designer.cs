@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ContactManagementSystem.Repositories.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260219055333_AuditEventTable")]
-    partial class AuditEventTable
+    [Migration("20260220163854_InitialTable")]
+    partial class InitialTable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -33,6 +33,17 @@ namespace ContactManagementSystem.Repositories.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("AppName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("ContactId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Endpoint")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("UserAction")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -45,6 +56,8 @@ namespace ContactManagementSystem.Repositories.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ContactId");
 
                     b.ToTable("AuditEvents");
                 });
@@ -283,6 +296,17 @@ namespace ContactManagementSystem.Repositories.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("ContactManagementSystem.Repositories.Models.AuditEvent", b =>
+                {
+                    b.HasOne("ContactManagementSystem.Repositories.Models.ContactManagement", "Contact")
+                        .WithMany("AuditEvents")
+                        .HasForeignKey("ContactId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Contact");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -332,6 +356,11 @@ namespace ContactManagementSystem.Repositories.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("ContactManagementSystem.Repositories.Models.ContactManagement", b =>
+                {
+                    b.Navigation("AuditEvents");
                 });
 #pragma warning restore 612, 618
         }

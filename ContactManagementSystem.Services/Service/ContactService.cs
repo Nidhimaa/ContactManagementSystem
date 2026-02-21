@@ -52,10 +52,10 @@ namespace ContactManagementSystem.Services.Service
             // Audit Log for create Contact.
             await _auditService.LogAuditEventAsync(new AuditEventDTO
             {
-                UserAction = "Added Contact",
-                UserEmail = GetLoggedUserEmail()
+                UserAction = "Contact Created",
+                UserEmail = GetLoggedUserEmail(),
+                ContactId = entity.Id
             });
-
 
             return _mapper.Map<ContactResponseDTO>(entity);
         }
@@ -101,8 +101,9 @@ namespace ContactManagementSystem.Services.Service
             // Audit Log for update Contact.
             await _auditService.LogAuditEventAsync(new AuditEventDTO
             {
-                UserAction = "Updated Contact",
-                UserEmail = GetLoggedUserEmail()
+                UserAction = "Contact Updated",
+                UserEmail = GetLoggedUserEmail(),
+                ContactId = existing.Id
             });
 
             return _mapper.Map<ContactResponseDTO>(existing);
@@ -124,7 +125,8 @@ namespace ContactManagementSystem.Services.Service
             await _auditService.LogAuditEventAsync(new AuditEventDTO
             {
                 UserAction = "Contact Deleted",
-                UserEmail = GetLoggedUserEmail()
+                UserEmail = GetLoggedUserEmail(),
+                ContactId = existing.Id
             });
 
             return true;

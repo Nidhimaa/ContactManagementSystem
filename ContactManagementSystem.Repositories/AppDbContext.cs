@@ -43,6 +43,16 @@ namespace ContactManagementSystem.Repositories
                 entity.Property(x => x.IsDeleted)
                       .HasDefaultValue(false);
             });
+
+            builder.Entity<AuditEvent>(entity =>
+            {
+                entity.HasKey(a => a.Id);
+
+                entity.HasOne(a => a.Contact)
+                      .WithMany(c => c.AuditEvents)
+                      .HasForeignKey(a => a.ContactId)
+                      .OnDelete(DeleteBehavior.Restrict);
+            });
         }
     }
 }

@@ -67,7 +67,8 @@ namespace ContactManagementSystem.API.Controllers
                 await _auditService.LogAuditEventAsync(new AuditEventDTO
                 {
                     UserAction = "User Registered",
-                    UserEmail = request.Email
+                    UserEmail = request.Email,
+                    ContactId = null
                 });
 
                 return Ok("User registration completed successfully.");
@@ -101,7 +102,8 @@ namespace ContactManagementSystem.API.Controllers
                 await _auditService.LogAuditEventAsync(new AuditEventDTO
                 {
                     UserAction = "User Login",
-                    UserEmail = request.Email
+                    UserEmail = request.Email,
+                    ContactId = null
                 });
 
                 return Ok(new

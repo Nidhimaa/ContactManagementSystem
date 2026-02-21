@@ -2,7 +2,6 @@
 {
     public class ContactManagement
     {
-        // Using SQL server - auto increment
         public Guid Id { get; set; } = Guid.NewGuid();
 
         public string Name { get; set; } = string.Empty;
@@ -14,5 +13,7 @@
         public string MobileNo { get; set; } = string.Empty;
 
         public bool IsDeleted { get; set; }
+
+        public ICollection<AuditEvent> AuditEvents { get; set; } = new List<AuditEvent>();
     }
 }

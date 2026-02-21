@@ -34,6 +34,13 @@ namespace ContactManagementSystem.Repositories.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid?>("ContactId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Endpoint")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("UserAction")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -46,6 +53,8 @@ namespace ContactManagementSystem.Repositories.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ContactId");
 
                     b.ToTable("AuditEvents");
                 });
@@ -284,6 +293,16 @@ namespace ContactManagementSystem.Repositories.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("ContactManagementSystem.Repositories.Models.AuditEvent", b =>
+                {
+                    b.HasOne("ContactManagementSystem.Repositories.Models.ContactManagement", "Contact")
+                        .WithMany("AuditEvents")
+                        .HasForeignKey("ContactId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Contact");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -333,6 +352,11 @@ namespace ContactManagementSystem.Repositories.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("ContactManagementSystem.Repositories.Models.ContactManagement", b =>
+                {
+                    b.Navigation("AuditEvents");
                 });
 #pragma warning restore 612, 618
         }
